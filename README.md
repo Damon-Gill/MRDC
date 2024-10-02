@@ -181,3 +181,5 @@ class DataCleaning:
 - During this milestone it was noted that the cleaning previously carried out in milestone 2 was not sufficient, therefore further cleaning was carried out in order to correct the data types.
 
 ![Image of the orders table keys](https://raw.githubusercontent.com/Damon-Gill/MRDC/refs/heads/main/Orders%20Table.png)
+
+![Image of the foreign keys in the orders_table](https://raw.githubusercontent.com/Damon-Gill/MRDC/refs/heads/main/Orders%20Table%20keys.png)
