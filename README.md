@@ -183,3 +183,57 @@ class DataCleaning:
 ![Image of the orders table keys](https://raw.githubusercontent.com/Damon-Gill/MRDC/refs/heads/main/Orders%20Table.png)
 
 ![Image of the foreign keys in the orders_table](https://raw.githubusercontent.com/Damon-Gill/MRDC/refs/heads/main/Orders%20Table%20keys.png)
+
+
+## Milestone 4
+
+- Now the schemas have been set up, the data is ready toi be queried to find essential metrics.
+- The number of stores in specific countries/locations, sales, staff headcount etc can all be queried.
+- Below is an example of a query highlighting the average time taken per sale for each year.
+
+```python
+
+WITH sales_with_time AS (
+    SELECT
+        d.year,
+        TO_TIMESTAMP(
+            CONCAT(d.year, '-', LPAD(d.month::text, 2, '0'), '-', LPAD(d.day::text, 2, '0'), ' ', d.timestamp), 
+            'YYYY-MM-DD HH24:MI:SS'
+        ) AS sale_time,
+        LEAD(
+            TO_TIMESTAMP(
+                CONCAT(d.year, '-', LPAD(d.month::text, 2, '0'), '-', LPAD(d.day::text, 2, '0'), ' ', d.timestamp), 
+                'YYYY-MM-DD HH24:MI:SS'
+            )
+        ) OVER (PARTITION BY d.year ORDER BY d.year, d.month, d.day, d.timestamp) AS next_sale_time
+    FROM
+        orders_table o
+    JOIN
+        dim_date_times d ON o.date_uuid = d.date_uuid
+    WHERE
+        d.timestamp IS NOT NULL
+),
+time_differences AS (
+    SELECT
+        year,
+        EXTRACT(EPOCH FROM (next_sale_time - sale_time)) AS time_diff_in_seconds
+    FROM
+        sales_with_time
+    WHERE
+        next_sale_time IS NOT NULL
+)
+SELECT
+    year,
+    CONCAT(
+        '"hours": ', FLOOR(AVG(time_diff_in_seconds) / 3600), ', ',
+        '"minutes": ', FLOOR((AVG(time_diff_in_seconds) % 3600) / 60), ', ',
+        '"seconds": ', FLOOR(AVG(time_diff_in_seconds) % 60), ', ',
+        '"milliseconds": ', ROUND((AVG(time_diff_in_seconds) * 1000) % 1000)
+    ) AS actual_time_taken
+FROM
+    time_differences
+GROUP BY
+    year
+ORDER BY
+    year;
+```
