@@ -176,4 +176,8 @@ class DataCleaning:
 
 ## Milestone 3
 
+- Data types were corrected to show the true types for each table, below is an example from the main data table (orders_table).
+- Primary keys were then made in all the dimension table and similarly, foreign keys were made in the data table in order to link all the dimensions and finalise the star schema.
+- During this milestone it was noted that the cleaning previously carried out in milestone 2 was not sufficient, therefore further cleaning was carried out in order to correct the data types.
+
 ![Image of the orders table keys](https://raw.githubusercontent.com/Damon-Gill/MRDC/refs/heads/main/Orders%20Table.png)
