@@ -173,3 +173,7 @@ class DataCleaning:
         #date_df = date_df.dropna(inplace=True)
         return date_df
 ```
+
+## Milestone 3
+
+![Image of the orders table keys](https://raw.githubusercontent.com/Damon-Gill/MRDC/refs/heads/main/Orders%20Table.png)
